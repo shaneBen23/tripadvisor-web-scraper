@@ -74,6 +74,7 @@ async function updatedLondonListingsAddress() {
     cell.value = address;
     row.commit();
     
+    console.log('Row number:', i);
     console.log('Restaurant name:', name.value);
     console.log('Restaurant address:', cell.value);
     console.log('===');
