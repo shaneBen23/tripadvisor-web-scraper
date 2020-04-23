@@ -1,5 +1,7 @@
 # tripadvisor-web-scraper
 
+node version 10 minimum required
+
 npm i
 node scraper.js
 
