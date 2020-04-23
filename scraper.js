@@ -39,9 +39,9 @@ async function scrapePage(url) {
   await browser.close();
 
   if (locality) {
-    address = street + ' ' + extAddress + ' ' + locality + country;
+    address = street + ', ' + extAddress + ', ' + locality + country;
   } else {
-    address = street + ' ' + extAddress + country;
+    address = street + ', ' + extAddress + country;
   }
 
   if (!street && !extAddress && !locality && !country) {
