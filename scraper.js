@@ -100,7 +100,7 @@ async function updatedLondonListingsAddress() {
       console.log('****** Writing complete ******');
       if(i%100 === 0) {
         console.log('****** Writing backup ******');
-        await worksheetUpdated.xlsx.writeFile('./london_listings_backup.xlsx');
+        await workbook.xlsx.writeFile('./london_listings_backup.xlsx');
         console.log('****** Backup complete ******');
       }
       console.log('===');
