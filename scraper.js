@@ -95,9 +95,11 @@ async function updatedLondonListingsAddress() {
       done.value = DONE;
       row.commit();
       console.log('Restaurant address:', cell.value);
+      if(i%10 === 0) {
       console.log('****** Writing to file ******');
       await workbook.xlsx.writeFile('./london_listings_updated.xlsx');
       console.log('****** Writing complete ******');
+      }
       if(i%100 === 0) {
         console.log('****** Writing backup ******');
         await workbook.xlsx.writeFile('./london_listings_backup.xlsx');
