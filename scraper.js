@@ -84,24 +84,29 @@ async function updatedLondonListingsAddress() {
 
     console.log('Row number:', i);
     console.log('Restaurant name:', name.value);
-    console.log('Restaurant address:', cell.value);
+    if(cell.value) {
+      console.log('Restaurant address:', cell.value);
+    }
+    
 
     if (done.value !== DONE) {
       const address = await scrapePage(baseURL + path);
       cell.value = address;
       done.value = DONE;
       row.commit();
+      console.log('Restaurant address:', cell.value);
       console.log('****** Writing to file ******');
       await workbook.xlsx.writeFile('./london_listings_updated.xlsx');
       console.log('****** Writing complete ******');
+      if(i%100 === 0) {
+        console.log('****** Writing backup ******');
+        await worksheetUpdated.xlsx.writeFile('./london_listings_backup.xlsx');
+        console.log('****** Backup complete ******');
+      }
       console.log('===');
     } else {
       console.log('****** Already up to date ******');
       console.log('===');
-    }
-
-    if(i%100 === 0) {
-      await workbook.xlsx.writeFile('./london_listings_backup.xlsx');
     }
   }
 
