@@ -99,6 +99,10 @@ async function updatedLondonListingsAddress() {
       console.log('****** Already up to date ******');
       console.log('===');
     }
+
+    if(i%100 === 0) {
+      await workbook.xlsx.writeFile('./london_listings_backup.xlsx');
+    }
   }
 
   console.log('********************************');
