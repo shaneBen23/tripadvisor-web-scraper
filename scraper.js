@@ -52,37 +52,54 @@ async function scrapePage(url) {
 }
 
 async function updatedLondonListingsAddress() {
+  console.log('*******************************');
+  console.log('Listing address update starting');
+  console.log('*******************************');
+
   const baseURL = 'https://www.tripadvisor.co.uk';
+  const DONE = 'done';
+
+  console.log('**************************');
+  console.log('Opening listings workbooks');
+  console.log('**************************');
   const workbook = new Excel.Workbook();
   const londonListings = await workbook.xlsx.readFile('./london_listings.xlsx');
-  // const londonListings = await workbook.xlsx.readFile('./london_listings_sample.xlsx');
-  // const londonListings = await workbook.xlsx.readFile('./sample_london_listings.xlsx');
+  const londonListingsUpdated = await workbook.xlsx.readFile('./london_listings_updated.xlsx');
   
   const worksheet = londonListings.getWorksheet(1);
+  const worksheetUpdated = londonListingsUpdated.getWorksheet(1);
 
   const rowCount = worksheet.lastRow._number + 1;
-  console.log('******************************');
-  console.log('Listing address update started');
-  console.log('******************************');
+
+  console.log('************************');
+  console.log('Updating process started');
+  console.log('************************');
+
   for (let i = 2; i < rowCount; i++) {
     let row = worksheet.getRow(i);
     let name = worksheet.getCell(`B${i}`);
     let path = worksheet.getCell(`J${i}`);
     let cell = worksheet.getCell(`L${i}`);
-    const address = await scrapePage(baseURL + path);
+    let done = worksheetUpdated.getCell(`M${i}`);
 
-    cell.value = address;
-    row.commit();
-    
     console.log('Row number:', i);
     console.log('Restaurant name:', name.value);
     console.log('Restaurant address:', cell.value);
-    console.log('===');
-  }
 
-  console.log('****** Writing to file ******');
-  workbook.xlsx.writeFile('./london_listings_updated.xlsx');
-  console.log('****** Writing complete ******');
+    if (done.value !== DONE) {
+      const address = await scrapePage(baseURL + path);
+      cell.value = address;
+      done.value = DONE;
+      row.commit();
+      console.log('****** Writing to file ******');
+      await workbook.xlsx.writeFile('./london_listings_updated.xlsx');
+      console.log('****** Writing complete ******');
+      console.log('===');
+    } else {
+      console.log('****** Already up to date ******');
+      console.log('===');
+    }
+  }
 
   console.log('********************************');
   console.log('Listing address update completed');
